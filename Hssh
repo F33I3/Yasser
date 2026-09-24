@@ -1,0 +1,35 @@
+#pylint:disable= 'og
+import requests
+import bs4
+import random
+from threading import Thread
+import os
+R1 = '\033[1;31m'
+G1 = '\033[1;32m'
+Y1 = '\033[1;33m'
+W1 = '\033[1;39m'
+god=0
+bad=0
+def Get():
+	global god,bad
+	while True:
+		u = ''.join(random.choice('1234567890') for i in range(11))
+		id1='615'+u
+		id2='6155'+u
+		domin=random.choice([id1,id2])
+		url = f'https://www.facebook.com/profile.php?id={domin}'
+		re=requests.get(url)
+		if 'people' in re.url:
+			soup=bs4.BeautifulSoup(re.text,'html.parser')
+			name = soup.find("meta", {'property':'og:title'})["content"]
+			os.system('clear')
+			god+=1
+			print(f'{G1}[@W_22U]—> ID-OK :{W1}{god} | {R1} ID-Error :{W1}{bad}')
+			with open('AccFace.txt','a') as f:
+				f.write(domin+' | '+name+'\n')    
+		else:
+			os.system('clear')
+			bad+=1
+			print(f'{G1}[@W_22U]—> ID-OK :{W1}{god} | {R1} ID-Error :{W1}{bad}')
+for i in range(100):
+	Thread(target=Get).start()
